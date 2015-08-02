@@ -14,16 +14,22 @@ setHashChangeListener();*/
 
 function addLetter(letter){
 	//console.log(letter);
-	$("#searchBar").val($("#searchBar").val() + letter);
+	var txt = "";
+	for(var u=0;u<=i;u++){
+		txt += string[u];
+	}
+	$("#searchBar").val(txt);
 }
 
 var interval = setInterval(function(){
-	addLetter(string[i]);
-	i++;
-	if(i >= string.length){
-		clearInterval(interval);
+	if(string[i] != undefined){
+		addLetter(string[i]);
+		i++;
+		if(i >= string.length){
+			clearInterval(interval);
+		}
 	}
-}, 100);
+}, 200);
 
 $("#searchBar").click(function(){
 	if(!firstClick){

@@ -11,7 +11,7 @@ var cookieParser = require('cookie-parser')
 /*** ============================== ***/
 
 //config for username and password
-var users = JSON.parse(fs.readFileSync("users.json"));
+var users = JSON.parse(fs.readFileSync("../../Documents/gross_ninja_users.json"));
 
 //set up headers for the server (not sure if this is really needed)
 app.use(function (req, res, next) {
@@ -38,7 +38,7 @@ app.post('/login', function(req, res){
 			//set the user to logged in
 			users.users[i].lastLoggedIn = new Date(Date.now()).getTime();
 			users.users[i].randomNumber = Math.random();
-			fs.writeFile("users.json", JSON.stringify(users, null, '\t')); //save the users data, there's definitely a better way to do this
+			fs.writeFile("../../Documents/gross_ninja_users.json", JSON.stringify(users, null, '\t')); //save the users data, there's definitely a better way to do this
 
 			res.setHeader('Set-Cookie', ["email="+users.users[i].email, "randomNumber="+users.users[i].randomNumber]);
 
