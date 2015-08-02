@@ -3,17 +3,20 @@
 		{
 			"email": "lasko25@gmail.com",
 			"password": "f00bar",
-			"lastLoggedIn": 1437353072756
+			"lastLoggedIn": 1438490773127,
+			"randomNumber": 0.20871337177231908
 		},
 		{
 			"email": "bob@bob.com",
 			"password": "bob",
-			"lastLoggedIn": ""
+			"lastLoggedIn": 1438490658011,
+			"randomNumber": 0.4940766461659223
 		},
 		{
 			"email": "a",
 			"password": "a",
-			"lastLoggedIn": 1436762954187
+			"lastLoggedIn": 1438490963586,
+			"randomNumber": 0.09092802740633488
 		}
 	]
 }

@@ -2,16 +2,6 @@
 window.location.hash = "login";
 setHashChangeListener();*/
 
-function request(endpoint, data, _callback){
-	$.ajax({
-		url: endpoint,
-		type: "POST",
-		data: data
-	}).done(function(data){
-		_callback(data);
-	});
-}
-
 //When all the images are ready...
 $("img").ready(function(){ //a hack for now to center everything
 	setTimeout(centerForm, 200);
