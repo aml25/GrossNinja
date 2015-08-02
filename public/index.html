@@ -1,0 +1,92 @@
+<html>
+<head>
+	<title>Gross Ninja</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/> <!--320-->
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="mobile-web-app-capable" content="yes">
+	<script type="text/javascript" src="/js/jquery-2.1.3.min.js"></script>
+	<link href='http://fonts.googleapis.com/css?family=Finger+Paint' rel='stylesheet' type='text/css'>
+	<link rel="shortcut icon" type="image/x-icon" href="ninja_favicon.ico" />
+	
+
+	<style type="text/css">
+		html{
+
+		}
+		body{
+			font-family:"Helvetica";
+			margin:0px;
+			padding:0px;
+		}
+
+		@media screen and (orientation: portrait){
+			img{
+				width:75%;
+				margin-left:12.5%;
+			}
+		}
+
+		@media screen and (orientation: landscape){
+			img{
+				width:30%;
+				margin-left:35%;
+			}
+		}
+	</style>
+
+	<link id="pagestyle" rel="stylesheet" type="text/css" href="">
+</head>
+<body>
+
+	<script type="text/javascript">
+
+		//var prevHash = "";
+
+		function loadPage(name){
+			//clearHashListener();
+			window.location.hash = name;
+
+			console.log(name);
+
+			if(name != ""){
+
+				//first load the css
+				$("#pagestyle").attr("href", "/css/"+name+".css");
+
+				document.title = "Gross Ninja: " + name;
+
+				//then load the HTML
+				$("body").load("/html/"+ name +".html",function(){
+
+					//after the html is loaded, then grab the js scripts for this page
+					$.getScript("/js/"+name+".js", function () {
+					  console.log('script is loaded');
+					});
+				});
+			}
+
+		}
+
+		$(document).ready(function(){
+
+			if(window.location.hash) {
+				var hash = window.location.hash.substring(1); //Puts hash in variable, and removes the # character
+				console.log("hash = " + hash);
+
+
+				loadPage(hash);
+			} else {
+				// No hash found
+				loadPage("login");
+			}
+		});
+
+		window.onhashchange = function(){
+			var hash = window.location.hash.substring(1); //Puts hash in variable, and removes the # character
+		    loadPage(hash);
+		}
+
+	</script>	
+
+</body>
+</html>

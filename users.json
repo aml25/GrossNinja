@@ -1,0 +1,19 @@
+{
+	"users": [
+		{
+			"email": "lasko25@gmail.com",
+			"password": "f00bar",
+			"lastLoggedIn": 1437353072756
+		},
+		{
+			"email": "bob@bob.com",
+			"password": "bob",
+			"lastLoggedIn": ""
+		},
+		{
+			"email": "a",
+			"password": "a",
+			"lastLoggedIn": 1436762954187
+		}
+	]
+}

@@ -1,0 +1,18 @@
+input{
+	font-size:1.5rem;
+	width:100%;
+	padding:4px 0px 4px 8px;
+}
+.grayText{
+	color: rgb(150,150,150);
+}
+.rounded{
+	border: none;
+	border-radius: 3px;
+}
+.shadow{
+	box-shadow: 0px 5px 15px rgba(0,0,0,0.5);
+}
+.searchbarContainer{
+	margin:8px;
+}

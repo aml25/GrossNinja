@@ -1,0 +1,52 @@
+.rounded{
+	border: none;
+	border-radius: 3px;
+}
+.shadow{
+	box-shadow: 0px 5px 15px rgba(0,0,0,0.5);
+}
+.grayText{
+	color: rgb(150,150,150);
+}
+
+.logo{
+	font-family:"Finger Paint";
+	font-size:1.125rem;
+}
+.loginFormContainer{
+	overflow:hidden;
+	position:absolute;
+	opacity:0.01;
+}
+.margin20{
+	margin:20px;
+}
+.margin10{
+	margin:10px;
+}
+.imgContainer{
+	width:100%;
+	margin-bottom:40px;
+}
+input{
+	display:block;
+	margin-bottom: 1rem;
+	width:100%;
+	font-size:1.25rem;
+	padding:5px;
+	//border-color:#222222;
+	//border-width:1;
+}
+p{
+	margin:20px;
+}
+
+.error{
+	position: fixed;
+	bottom:10;
+	color: rgb(255,0,0);
+	font-size:0.75rem;
+	width:100%;
+	text-align: center;
+	display:none;
+}
