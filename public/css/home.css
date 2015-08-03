@@ -1,0 +1,30 @@
+/*home.css*/
+
+.circle{
+	width: 29%;
+	border: none;
+	border-radius: 50%;
+	margin:2%;
+	left:38%;
+	top:-100px;
+}
+
+.absolutePosition{
+	position:absolute;
+}
+
+.blackBg{
+	background: #000;
+}
+
+#dragBox{
+	width: 90%;
+	margin: 4%;
+	height: 25%;
+	bottom:0px;
+	left:0px;
+	position: absolute;
+	border: 3.75px dashed #000;
+	border-radius: 90px;
+	transition: background 0.5s;
+}

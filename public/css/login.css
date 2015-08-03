@@ -17,6 +17,8 @@
 	overflow:hidden;
 	position:absolute;
 	opacity:0.01;
+	top:0;
+	left:0;
 }
 .margin20{
 	margin:20px;

@@ -5,6 +5,10 @@
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name="mobile-web-app-capable" content="yes">
 	<script type="text/javascript" src="/js/jquery-2.1.3.min.js"></script>
+	<script type="text/javascript" src="/js/jquery.easing.1.3.js"></script>
+	<script type="text/javascript" src="/js/jquery-ui.min.js"></script>
+	<script type="text/javascript" src="/js/jquery.ui.touch-punch.min.js"></script>
+	
 	<link href='http://fonts.googleapis.com/css?family=Finger+Paint' rel='stylesheet' type='text/css'>
 	<link rel="shortcut icon" type="image/x-icon" href="ninja_favicon.ico" />
 	
@@ -43,12 +47,22 @@
 			- Need to limit page loads to only once, for some reason they are loading multiple times
 		*******/
 
+		jQuery.easing.def = "easeOutBounce";
+
+		var loginPageTitle = "login";
+		var loggedinPageTitle = "home";
+
 		//A generic request function
-		function request(endpoint, data, _callback){
+		function request(endpoint, data, _callback, async){
+			if(async == undefined){
+				async = true;
+			}
+
 			$.ajax({
 				url: endpoint,
 				type: "POST",
-				data: data
+				data: data,
+				async: async
 			}).done(function(data){
 				_callback(data);
 			});
@@ -88,45 +102,64 @@
 			}
 		}
 
-		$(document).ready(function(){
+		var hash = "";
 
+		$(document).ready(function(){
 			if(window.location.hash) {
-				queueLocation();
-			} else {
-				// No hash found
-				loadPage("login");
+				hash = window.location.hash.substring(1);
 			}
+			else {
+				// No hash found
+				hash = loginPageTitle;
+			}
+
+			console.log("hash: " + hash);
+			queueLocation(); //now that the hash is set, queue it up
 		});
 
 		window.onhashchange = function(){
-			queueLocation();	
+			queueLocation();
 		}
 
 		function logOut(){
 			//first clear the cookies
-			document.cookie = "email=;randomNumber=";
-			loadPage("login");
+			document.cookie = "email=";
+			document.cookie = "randomNumber=";
+			loadPage(loginPageTitle);
 		}
 
 		function queueLocation(){
-			var hash = window.location.hash.substring(1); //Puts hash in variable, and removes the # character
-		    console.log("hash: " + hash);
+			if(getCookie("email") == ""){ //no user is signed in, bring them to login screen
+				loadPage(loginPageTitle);
+			}
 
-		    loadPage(hash);
+			else{ //someone is signed in already - but make sure it's authorized
+				
+				//check the match for login credentials
+				var email = getCookie("email");
+				var randomNumber = getCookie("randomNumber");
+				request("checkLogin", {email: email, randomNumber: randomNumber}, function(data){
+						console.log(data);
+						if(data.status == true){ //it's a match, let them in
+							if(hash != loginPageTitle){ //as long as the requested page isn't the login screen, load the hash (requested page)
+								loadPage(hash);
+							}
+							else{ //if the request is the login page then load the default loggedinPage
+								loadPage(loggedinPageTitle);
+							}
+						}
+						else{ //no match, something is wrong - log out
+							logOut();
+						}
+					}, false
+				);
+			}
 
-		    //now check if a user is already logged from cookies
-			var email = getCookie("email");
-			var randomNumber = getCookie("randomNumber");
-			request("checkLogin", {email: email, randomNumber: randomNumber}, function(data){
-					console.log(data);
-					if(data.status == true){
-						loadPage("search");
-					}
-					else{
-						loadPage("login");
-					}
-				}
-			);
+			
+
+		    //loadPage(hash);
+
+		    
 		}
 
 	</script>	

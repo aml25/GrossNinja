@@ -66,3 +66,14 @@ $('input:first').next().on("keydown",function(event){
 $("input").on("keydown", function(event){
 	$(".error").fadeOut();
 });
+
+//functions for scrolling the page when user focuses on text box
+$('input:first').on('focus', function() {
+	console.log("scrolling");
+    document.body.scrollTop = $(this).offset().top;
+});
+
+$('input:first').next().on('focus', function() {
+	console.log("scrolling");
+    document.body.scrollTop = $(this).offset().top;
+});
