@@ -69,6 +69,10 @@ app.post('/checkLogin', function(req, res){
 	}
 });
 
+app.get("/something", function(req, res){
+	console.log("shit yeah!");
+})
+
 /*** FINALLY, START LISTENING ON THE SERVER ***/
 server.listen(7777,  function(){
     console.log(server.address());

@@ -3,8 +3,8 @@ var marginPercentage = 2;
 
 var dragging = false;
 
-function initCircles(){
-	$(".circle").each(function(i){
+function initIcons(){
+	$(".icons").each(function(i){
 		console.log(i);
 		$(this).height($(this).width());
 		$(this).animate({
@@ -18,7 +18,7 @@ function initCircles(){
 	});
 
 
-	$(".circle").draggable({
+	$(".icons").draggable({
 		start: function(e){
 			dragging = true;
 			console.log(e);
@@ -41,23 +41,46 @@ function initCircles(){
 					"background": "#e0e0e0"
 				});
 				$("#dragBox").stop().animate({
-					"borderRadius": "60px"
-				},250,"easeOutExpo");
+					"borderRadius": map(distance(e.clientX,e.clientY,$(document).width()/2, $(document).height()), 0, $(document).height(), 20, 90)
+				},150,"easeOutExpo");
 			}
 		},
 		stop: function(e){
 			dragging = false;
-			$(this).animate({
-				"left": (($(this).attr("data-count")%columnCount) * $("body").width()/columnCount) + "px",
-				"top": (Math.floor($(this).attr("data-count")/columnCount) * ($(this).height() + $("body").height() * (marginPercentage/100))) + "px"
-			}, 500);;
 
-			$("#dragBox").css({
-				"background": "rgba(255,255,255,0)"
-			});
-			$("#dragBox").stop().animate({
-				"borderRadius": "90px"
-			},250, "easeOutExpo");
+			if(mouseInsideDragBox(e.clientX, e.clientY)){
+				$(this).animate({
+					width: $(document).height()*1.5,
+					height: "150%",
+					borderRadius: "50%",
+					left: ($(document).width()/2) - ($(document).height()*1.5)/2,
+					top: ($(document).height()/2) - ($(document).height()*1.5)/2
+				}, {
+					duration: 1000,
+					queue: false,
+					easing: "easeInOutExpo"
+				});
+
+				var selected = this;
+				$('body').children().fadeOut({
+					duration: 500,
+					easing: "easeInOutCubic"
+				}); //hide all nodes directly under the body
+				$(this).appendTo('body');			
+			}
+			else{
+				$(this).animate({
+					"left": (($(this).attr("data-count")%columnCount) * $("body").width()/columnCount) + "px",
+					"top": (Math.floor($(this).attr("data-count")/columnCount) * ($(this).height() + $("body").height() * (marginPercentage/100))) + "px"
+				}, 500);;
+
+				$("#dragBox").css({
+					"background": "rgba(255,255,255,0)"
+				});
+				$("#dragBox").stop().animate({
+					"borderRadius": "90px"
+				},250, "easeOutExpo");
+			}
 		}
 	});
 }
@@ -70,4 +93,12 @@ function mouseInsideDragBox(mouseX, mouseY){
 	return mouseX >= dragBoxX && mouseX <= dragBoxX + dragBoxWidth && mouseY >= dragBoxY && mouseY <= dragBoxY + dragBoxHeight;
 }
 
-initCircles();
+function distance(xa,ya,xb,yb){
+	return Math.sqrt(Math.pow(xa-xb, 2) + Math.pow(ya-yb,2));
+}
+
+function map(val,amin,amax,bmin,bmax){
+	return (val-amin)/(amax-amin) * (bmax-bmin) + bmin;
+}
+
+initIcons();

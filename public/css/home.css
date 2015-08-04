@@ -9,6 +9,19 @@
 	top:-100px;
 }
 
+.bgContainer{
+	position: absolute;
+	left:0;
+	top:0;
+	width:100%;
+	height:100%;
+	overflow: hidden;
+}
+
+.icons{
+
+}
+
 .absolutePosition{
 	position:absolute;
 }
@@ -17,7 +30,7 @@
 	background: #000;
 }
 
-#dragBox{
+.dragBox{
 	width: 90%;
 	margin: 4%;
 	height: 25%;
@@ -26,5 +39,17 @@
 	position: absolute;
 	border: 3.75px dashed #000;
 	border-radius: 90px;
+}
+
+.fullscreen{
+	margin:0;
+	position: absolute;
+	left:0 !important;
+	top:0 !important;
+	width:100% !important;
+	height:100% !important;
+}
+
+#dragBox{
 	transition: background 0.5s;
 }
