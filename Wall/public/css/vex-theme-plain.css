@@ -156,11 +156,11 @@
     .vex.vex-theme-plain .vex-dialog-button.vex-last {
       margin-left: 0; }
     .vex.vex-theme-plain .vex-dialog-button:focus {
-      animation: vex-pulse 1.1s infinite;
-      -webkit-animation: vex-pulse 1.1s infinite;
-      -moz-animation: vex-pulse 1.1s infinite;
-      -ms-animation: vex-pulse 1.1s infinite;
-      -o-animation: vex-pulse 1.1s infinite;
+      animation: vex-pulse 0.5s infinite;
+      -webkit-animation: vex-pulse 0.5s infinite;
+      -moz-animation: vex-pulse 0.5s infinite;
+      -ms-animation: vex-pulse 0.5s infinite;
+      -o-animation: vex-pulse 0.5s infinite;
       -webkit-backface-visibility: hidden;
       outline: none; }
       @media (max-width: 568px) {
