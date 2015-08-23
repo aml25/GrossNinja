@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Gross Ninja</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/> <!--320-->
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="mobile-web-app-capable" content="yes">
+	<script type="text/javascript" src="js/jquery.min.js"></script>
+	<script type="text/javascript" src="js/jquery.easing.1.3.js"></script>
+	<script type="text/javascript" src="js/jquery-ui.min.js"></script>
+	<script type="text/javascript" src="js/jquery.ui.touch-punch.min.js"></script>
+	<script src="https://cdn.socket.io/socket.io-1.3.5.js"></script>
+
+	<script type="text/javascript" src="js/tether.min.js"></script>
+	<script type="text/javascript" src="js/select.min.js"></script>
+	<link rel="stylesheet" href="css/select-theme-default.css" />
+
+
+	<script src="js/vex.combined.min.js"></script>
+	<script>
+	    (function(){
+	        vex.defaultOptions.className = 'vex-theme-plain';
+	    })();
+	</script>
+	<link rel="stylesheet" href="css/vex.css" />
+	<link rel="stylesheet" href="css/vex-theme-plain.css" />
+
+	<link href='http://fonts.googleapis.com/css?family=Shadows+Into+Light' rel='stylesheet' type='text/css'>
+	<link href='http://fonts.googleapis.com/css?family=Special+Elite' rel='stylesheet' type='text/css'>
+	<link href='http://fonts.googleapis.com/css?family=Waiting+for+the+Sunrise' rel='stylesheet' type='text/css'>
+
+
+	<style type="text/css">
+		html, body{
+			margin:0;
+			font-size: 14px;
+			overflow:hidden;
+			background-color:#2B2B2B;
+			font-family: "Helvetica Neue", sans-serif;
+		}
+
+		.absolute{
+			position: absolute;
+		}
+
+		.fixed{
+			position:fixed;
+		}
+
+		.hidden{
+			opacity:0;
+		}
+
+		.visible{
+			opacity:1;
+		}
+
+		.one{
+			color: rgb(200,255,50);
+			font-family: "Shadows Into Light", cursive;
+		}
+
+		.two{
+			color: rgb(100,100,100);
+			font-family: "Special Elite", cursive;
+		}
+
+		.three{
+			color: rgb(255,60,100);
+			font-family: "Waiting for the Sunrise", cursive;
+		}
+
+		.extrasmall{
+			font-size:0.5rem;
+		}
+		.small{
+			font-size:1rem;
+		}
+		.medium{
+			font-size:2rem;
+		}
+		.large{
+			font-size:3rem;
+		}
+		.extralarge{
+			font-size:4rem;
+		}
+
+		.newButton{
+			width:60px;
+			height:60px;
+			border-radius: 50%;
+			border: none;
+			background-color:#F48BFF;
+			right:30px;
+			bottom:30px;
+			z-index:2;
+		}
+
+		.dropShadow{
+			box-shadow: 2px 6px 15px #111;
+		}
+
+		.textShadow{
+			text-shadow: 0px 4px 8px #111;
+		}
+
+		.newImage{
+			width:20px;
+			height:20px;
+			margin-left: 20px;
+			margin-top: 20px;
+		}
+
+		.linespacer{
+			width:100%;
+			height:6px;
+		}
+
+	</style>
+</head>
+<body>
+
+<div class="newButton fixed dropShadow">
+	<img src="images/new.png" class="newImage">
+
+</div>
+
+
+<script type="text/javascript">
+	//handle loading from database
+
+	jQuery.fn.rotate = function(degrees) {
+	    $(this).css({'-webkit-transform' : 'rotate('+ degrees +'deg)',
+	                 '-moz-transform' : 'rotate('+ degrees +'deg)',
+	                 '-ms-transform' : 'rotate('+ degrees +'deg)',
+	                 'transform' : 'rotate('+ degrees +'deg)'});
+	    return $(this);
+	};
+
+	//A generic request function
+	function request(endpoint, data, _callback, async){
+		if(async == undefined){
+			async = true;
+		}
+
+		$.ajax({
+			url: endpoint,
+			type: "POST",
+			data: data,
+			async: async
+		}).done(function(data){
+			_callback(data);
+		});
+	}
+
+	function createNewMessage(myClass, text, position){
+		socket.emit('newMessage', {
+			"class": myClass,
+			"text": text,
+			"position": position,
+			"rotate": (Math.random()*50) - 25,
+			"timetodie": Math.random() * 1000 /*seconds*/ * 60 /*minutes*/ * 30 /*minute multiiplier*/ /*placehoder for now, will think through algorithm for time to die functionality*/
+		});
+	}
+
+	function drawMessage(data){
+		var $newMessage = $("<div id='"+data.id+"' class='textShadow hidden absolute "+ data.class +"' style='left: "+data.position.x+"%; top: "+data.position.y+"%;'>"+ data.text +"</div>");
+		$("body").append($newMessage);
+		$newMessage.rotate(data.rotate);
+		$newMessage.delay(250).switchClass("hidden","visible",1000, "easeInExpo");
+	}
+
+	$(".newButton").click(function(){
+
+		vex.dialog.confirm({
+			message: 'Click anywhere on the wall to write a new message',
+			callback: function(value) {
+				//return console.log(value ? 'waiting for click' : 'cancelled');
+				if(value){
+					waitForScreenClick();
+				}
+			}
+		});
+
+	});
+
+	function waitForScreenClick(){
+		$("body").append("<div class='vex-overlay'>");
+		$("body").off("click");
+
+		$("body").click(function(e){
+			$("body").off("click");
+			$('.vex-overlay').remove();
+			
+			var x = e.clientX / $(document).width() * 100;
+			var y = e.clientY / $(document).height() * 100;
+
+			console.log(x + "% " + y + "%");
+
+			vex.dialog.open({
+				message: 'Write something on the wall',
+				input: "<input name='text' type='text' placeholder='say something damnit!' required /> \
+						<br><div class='linespacer'></div> \
+					<select id='fontsize' name='fontsize'> \
+					<option class='extrasmall' value='extrasmall'>extra small</option> \
+					<option class='small' value='small'>small</option> \
+					<option class='medium' value='medium'>medium</option> \
+					<option class='large' value='large'>large</option> \
+					<option class='extralarge' value='extralarge'>extra large</option> \
+					</select> <br><div class='linespacer'></div> \
+					<select id='font' name='font'> \
+					<option class='one' value='one'>Shadows Into Light</option> \
+					<option class='two' value='two'>Special Elite</option> \
+					<option class='three' value='three'>Waiting for the Sun</option> \
+					</select>",
+				buttons: [
+					$.extend({}, vex.dialog.buttons.YES, {
+			    		text: 'Write on the wall'
+			    	}), $.extend({}, vex.dialog.buttons.NO, {
+			    		text: 'Nevermind'
+					})
+				],
+				afterOpen: function(){
+					console.log("opened");
+
+					/*var sel = new Select({
+						el: $("#fontsize")[0]
+						className: 'select-theme-default'
+
+					});*/
+					Select.init({ useNative: false });
+				},
+				callback: function(data) {
+					if (data === false) {
+						return console.log('Cancelled');
+					}
+					
+					createNewMessage(data.fontsize + " " + data.font, data.text, { x: x, y: y});
+				}
+			});
+		});
+	}
+
+
+	var socket = io('http://192.168.1.126:8999'); //will need to change the address
+	
+	//this is where other clients writing on the wall will be insterted into another clients screen to keep everything in sync
+	socket.on('createdMessage', function(data) {
+		console.log(data);
+		drawMessage(data);
+	});
+	socket.on("removeMessages", function(data){
+		for(var i=0;i<data.length;i++){
+			$("#"+data[i]).fadeOut(5000, function(){
+				$(this).remove();
+			});
+		}
+	});
+
+
+	$(document).ready(function(){
+		request("/getMessages",{}, function(data){
+			console.log(data);
+
+			for(var i=0;i<data.messages.length;i++){
+				drawMessage(data.messages[i]);
+			}
+		})
+	});
+</script>
+
+</body>
+</html>

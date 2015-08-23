@@ -1,0 +1,26 @@
+{
+	"messages": [
+		{
+			"class": "extralarge one",
+			"text": "Say something damnit!!!!!",
+			"position": {
+				"x": 35.17350157728706,
+				"y": 40.25069637883008
+			},
+			"rotate": -22.890785906929523,
+			"timetodie": 630323.0185210705,
+			"id": 590028
+		},
+		{
+			"class": "medium three",
+			"text": "what the fuck man???",
+			"position": {
+				"x": 20.673813169984687,
+				"y": 17.13091922005571
+			},
+			"rotate": 4.010584103409201,
+			"timetodie": 299709.43140797317,
+			"id": 1000178
+		}
+	]
+}
