@@ -128,7 +128,19 @@
 
 
 <script type="text/javascript">
-	//handle loading from database
+	
+	function getQueryVariable(variable)
+	{
+		var query = window.location.search.substring(1);
+		var vars = query.split("&");
+		for (var i=0;i<vars.length;i++) {
+			var pair = vars[i].split("=");
+			if(pair[0] == variable) {
+				return pair[1];
+			}
+		}
+		return(false);
+	}
 
 	jQuery.fn.rotate = function(degrees) {
 	    $(this).css({'-webkit-transform' : 'rotate('+ degrees +'deg)',
@@ -260,11 +272,20 @@
 
 
 	$(document).ready(function(){
-		request("/getMessages",{}, function(data){
+		request("/getMessages",{
+			id: getQueryVariable("id")
+		}, function(data){
 			console.log(data);
-
-			for(var i=0;i<data.messages.length;i++){
-				drawMessage(data.messages[i]);
+			for(var i=0;i<data.length;i++){
+				drawMessage(data[i]);
+			}
+			if(data.length <= 0){
+				vex.dialog.alert({
+				message: 'This shareable link will let others join your wall: <strong>' + window.location.origin + window.location.search + '</strong',
+				callback: function(value) {
+					
+				}
+		});
 			}
 		})
 	});

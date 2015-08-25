@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Tune.farm</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/> <!--320-->
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="mobile-web-app-capable" content="yes">
+	<style type="text/css">
+
+		html,body{
+			margin:0;
+			padding:0;
+			font-family: "Helvetica Neue", sans-serif;
+			font-size: 14px;
+		}
+
+		.audioContainer{
+			height:5rem;
+			width:100%;
+			border-style:solid;
+			border-color:white;
+			border-top-width: 1rem;
+			border-left-width: 1rem;
+			border-bottom-width: 0rem;
+			border-right-width: 1rem;
+			 -webkit-box-sizing: border-box;
+    		-moz-box-sizing: border-box;
+    		box-sizing: border-box;
+    		background-color: #2B2B2B;
+		}
+
+		/*.audioTimelineContainer{
+			width:100%;
+			height:100%;
+			margin: 1.5rem;
+			
+		}*/
+
+		.audioTimeline{
+			height:3.2rem;
+			width:0%;
+			background-color: #F48BFF;
+			margin:.4rem;
+			
+		}
+
+		.currentTime{
+			height:100%;
+			width:0.25rem;
+			background-color: #2B2B2B;
+			position:absolute;
+			top:0;
+			left:0;
+			z-index:-1;
+		}
+
+	</style>
+	<script type="text/javascript" src="js/libs/jquery.min.js"></script>
+</head>
+<body>
+
+	<div class="currentTime"></div>
+
+	<div class="audioContainer">
+			<div class="audioTimeline">
+				<audio>
+					<source src="audiofiles/acoustic.mp3" type="audio/mpeg">
+					Your browser does not support the audio element.
+				</audio>
+			</div>
+	</div>
+
+	<div class="audioContainer">
+			<div class="audioTimeline">
+				<audio>
+					<source src="audiofiles/bass.mp3" type="audio/mpeg">
+					Your browser does not support the audio element.
+				</audio>
+			</div>
+	</div>
+
+	<div class="audioContainer">
+			<div class="audioTimeline">
+				<audio>
+					<source src="audiofiles/electric.mp3" type="audio/mpeg">
+					Your browser does not support the audio element.
+				</audio>
+			</div>
+	</div>
+
+	<div class="audioContainer">
+			<div class="audioTimeline">
+				<audio>
+					<source src="audiofiles/vocals1.mp3" type="audio/mpeg">
+					Your browser does not support the audio element.
+				</audio>
+			</div>
+	</div>
+
+	<div class="audioContainer">
+			<div class="audioTimeline">
+				<audio>
+					<source src="audiofiles/vocals2.mp3" type="audio/mpeg">
+					Your browser does not support the audio element.
+				</audio>
+			</div>
+	</div>
+
+	<div class="audioContainer">
+			<div class="audioTimeline">
+				<audio>
+					<source src="audiofiles/vocals3.mp3" type="audio/mpeg">
+					Your browser does not support the audio element.
+				</audio>
+			</div>
+	</div>
+
+	
+
+	<script type="text/javascript">
+
+		var audio = [];
+
+		var sampleDuration;
+		
+		$("audio").each(function(i){
+			//this.loop = true;
+			this.play();
+
+			var currAudio = {
+				index: i,
+				audioElement: this,
+				audioTimeline: $($(".audioTimeline")[i]),
+				audioContainer: $($(".audioContainer")[i]),
+				queueToPlay: true 
+			}
+
+			audio.push(currAudio);
+		});
+
+		var masterAudio = $(audio[0].audioElement).clone();
+		masterAudio[0].volume = 0;
+		//masterAudio[0].loop = true;
+		masterAudio[0].play();
+
+		//the master time keeper
+		$(masterAudio).on('ended', function(){
+			console.log("finished audio: " + audio[0].index);
+			audio.forEach(function(currAudio, i){
+				if(currAudio.queueToPlay){
+					currAudio.audioElement.play();
+				};
+			});
+			masterAudio[0].play();
+		});
+		////////////////////////
+
+		audio.forEach(function(currAudio, i){
+			currAudio.audioContainer.click(function(){
+				if(currAudio.audioElement.paused){
+					currAudio.queueToPlay = true;
+				}
+				else{
+					currAudio.audioElement.currentTime = 0;
+					currAudio.audioElement.pause();
+					currAudio.queueToPlay = false;
+					currAudio.audioTimeline.animate({
+						width: "0%"
+					}, 250);
+					
+				}
+			})
+		})
+
+		var play = setInterval(function(){
+			$(".audioTimeline").each(function(i){
+				//console.log($("audio")[i].currentTime / $("audio")[i].duration);
+				if(!$("audio")[i].paused){
+					$(this).animate({
+						width: ($("audio")[i].currentTime / $("audio")[i].duration * 97) + "%"
+					},0);
+				}
+			});
+
+			$(".currentTime").animate({
+				left: (masterAudio[0].currentTime / masterAudio[0].duration * 97) + "%"
+			}, 0);
+		},15);
+
+	</script>
+
+</body>
+</html>

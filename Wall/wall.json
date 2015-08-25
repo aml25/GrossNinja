@@ -1,4 +1,64 @@
 {
+	"walls": {
+		"1234": {
+			"messages": [
+				{
+					"class": "extrasmall one",
+					"text": "fuck yeah!!!!!!!!!!!!!!!!",
+					"position": {
+						"x": 28.894806924101196,
+						"y": 29.247910863509752
+					},
+					"rotate": 6.762534868903458,
+					"timetodie": 869950.7488869131,
+					"id": 3015846
+				}
+			]
+		},
+		"12345": {
+			"messages": []
+		},
+		"3212848211": {
+			"messages": [
+				{
+					"class": "extralarge one",
+					"text": "Say something damnit!!!!!",
+					"position": {
+						"x": 35.17350157728706,
+						"y": 40.25069637883008
+					},
+					"rotate": -22.890785906929523,
+					"timetodie": 330323.0185210705,
+					"id": 590028
+				},
+				{
+					"class": "extralarge one",
+					"text": "Say something damnit!!!!!",
+					"position": {
+						"x": 15.17350157728706,
+						"y": 10.25069637883008
+					},
+					"rotate": -22.890785906929523,
+					"timetodie": 330323.0185210705,
+					"id": 590028
+				},
+				{
+					"class": "extrasmall three",
+					"text": "fuck yeah!",
+					"position": {
+						"x": 25.432756324900136,
+						"y": 73.3983286908078
+					},
+					"rotate": 16.91898553399369,
+					"timetodie": 115285.254875198,
+					"id": 1118975
+				}
+			]
+		},
+		"fuckfuck": {
+			"messages": []
+		}
+	},
 	"messages": [
 		{
 			"class": "extralarge one",
@@ -8,19 +68,8 @@
 				"y": 40.25069637883008
 			},
 			"rotate": -22.890785906929523,
-			"timetodie": 630323.0185210705,
+			"timetodie": 330323.0185210705,
 			"id": 590028
-		},
-		{
-			"class": "medium three",
-			"text": "what the fuck man???",
-			"position": {
-				"x": 20.673813169984687,
-				"y": 17.13091922005571
-			},
-			"rotate": 4.010584103409201,
-			"timetodie": 299709.43140797317,
-			"id": 1000178
 		}
 	]
 }

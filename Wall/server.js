@@ -8,6 +8,7 @@ var app = module.exports.app = express();
 var server = http.createServer(app); //the server, serving the files to clients
 var bodyParser = require('body-parser');
 var io = require('socket.io')(server);
+var url = require("url");
 /*** ============================== ***/
 
 //config for username and password
@@ -29,6 +30,8 @@ app.use(express.static(__dirname + '/public'));
 
 /***do stuff here***/
 
+var wallID; //this is the users current wall
+
 io.on('connection', function (socket) {
 
 	socket.on('newMessage', function (data) {
@@ -36,7 +39,13 @@ io.on('connection', function (socket) {
 		data.id = Math.round((Math.random() * Math.random() * Math.random()) * 100000000); //set some unique id
 
 		console.log(data);
-		messages.messages.push(data);
+
+		if(wallID == "false"){
+			messages.messages.push(data);
+		}
+		else{
+			messages.walls[wallID].messages.push(data);
+		}
 
 		fs.writeFile("wall.json", JSON.stringify(messages, null, '\t')); //save the users data, there's definitely a better way to do this
 		console.log("just wrote to the file");
@@ -46,7 +55,24 @@ io.on('connection', function (socket) {
 });
 
 app.post("/getMessages", function(req, res){
-	res.send(messages);
+	wallID = req.body.id;
+	if(messages.walls.hasOwnProperty(wallID)){
+		res.send(messages.walls[wallID].messages);
+	}
+	else if(wallID == "false"){
+		res.send(messages.messages);
+	}
+	else{
+		messages.walls[wallID] = {};
+		messages.walls[wallID]['messages'] = [];
+
+		fs.writeFile("wall.json", JSON.stringify(messages, null, '\t')); //save the users data, there's definitely a better way to do this
+		console.log("just wrote to the file");
+
+		res.send(messages.walls[wallID].messages);
+	}
+	
+	
 });
 
 /*app.post("/newMessage", function(req, res){
@@ -60,7 +86,7 @@ app.post("/getMessages", function(req, res){
 });*/
 
 //every second loop through messages and start to kill them
-setInterval(function(){
+/*setInterval(function(){
 	var deadMessages = [];
 	for(var i=0;i<messages.messages.length;i++){
 		messages.messages[i].timetodie -= 1000;
@@ -74,7 +100,7 @@ setInterval(function(){
 		fs.writeFile("wall.json", JSON.stringify(messages, null, '\t')); //save the users data, there's definitely a better way to do this
 		io.sockets.emit('removeMessages', deadMessages);
 	}
-}, 1000);
+}, 1000);*/
 
 /*******************/
 
