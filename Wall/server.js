@@ -32,9 +32,9 @@ app.use(express.static(__dirname + '/public'));
 
 var wallID; //this is the users current wall
 
-io.on('connection', function (socket) {
+io.on('connection', function(socket) {
 
-	socket.on('newMessage', function (data) {
+	socket.on('newMessage', function(data) {
 		
 		data.id = Math.round((Math.random() * Math.random() * Math.random()) * 100000000); //set some unique id
 
@@ -52,6 +52,13 @@ io.on('connection', function (socket) {
 
 		io.sockets.emit('createdMessage', data);
 	});
+
+	socket.on("clearWall", function(data){
+		messages.walls[wallID].messages = [];
+		fs.writeFile("wall.json", JSON.stringify(messages, null, '\t')); //save the users data, there's definitely a better way to do this
+		
+		io.sockets.emit("clearWall");
+	})
 });
 
 app.post("/getMessages", function(req, res){

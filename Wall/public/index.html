@@ -9,6 +9,7 @@
 	<script type="text/javascript" src="js/jquery.easing.1.3.js"></script>
 	<script type="text/javascript" src="js/jquery-ui.min.js"></script>
 	<script type="text/javascript" src="js/jquery.ui.touch-punch.min.js"></script>
+	<script type="text/javascript" src="js/jquery.finger.min.js"></script>
 	<script src="https://cdn.socket.io/socket.io-1.3.5.js"></script>
 
 	<script type="text/javascript" src="js/tether.min.js"></script>
@@ -86,15 +87,44 @@
 			font-size:4rem;
 		}
 
-		.newButton{
+		.button{
 			width:60px;
 			height:60px;
 			border-radius: 50%;
 			border: none;
 			background-color:#F48BFF;
-			right:30px;
-			bottom:30px;
 			z-index:2;
+			right:15px;
+			bottom:15px;
+		}
+
+		.button img{
+			width:35px;
+			height:35px;
+			margin-left: 12.5px;
+			margin-top: 12.5px;
+		}
+
+		/*.button img:first-child{
+			width:30px;
+			height:30px;
+			margin-left: 15px;
+			margin-top: 15px;
+		}*/
+
+		.p{
+			font-weight:100;
+			color:white;
+		}
+
+		*{
+			-webkit-touch-callout: none;
+			-webkit-user-select: none;
+			-khtml-user-select: none;
+			-moz-user-select: none;
+			-ms-user-select: none;
+			-o-user-select: none;
+			user-select: none;
 		}
 
 		.dropShadow{
@@ -105,29 +135,52 @@
 			text-shadow: 0px 4px 8px #111;
 		}
 
-		.newImage{
-			width:20px;
-			height:20px;
-			margin-left: 20px;
-			margin-top: 20px;
-		}
-
 		.linespacer{
 			width:100%;
 			height:6px;
+		}
+
+		.z-index-3{
+			z-index:3;
+		}
+
+		#thewall{
+			position: absolute;
+			width:100%;
+			height:100%;
 		}
 
 	</style>
 </head>
 <body>
 
-<div class="newButton fixed dropShadow">
-	<img src="images/new.png" class="newImage">
+<!-- NEW button -->
+<div class="z-index-3 button fixed dropShadow">
+	<img src="images/new_2-01.png">
+</div>
 
+<!-- Write message button-->
+<div id="message" class="hidden button fixed dropShadow">
+	<div class="p z-index-3 textShadow hidden">Write a message</div>
+	<img src="images/message_2-01.png">
+</div>
+
+<!-- Clear wall button -->
+<div id="clear" class="hidden button fixed dropShadow">
+	<div class="p z-index-3 textShadow hidden">Clear the wall</div>
+	<img src="images/clear_2-01.png">
+</div>
+
+<!-- New wall button -->
+<div id="wall" class="hidden button fixed dropShadow">
+	<div class="p z-index-3 textShadow hidden">Start a new wall</div>
+	<img src="images/wall_4-01.png">
 </div>
 
 
 <script type="text/javascript">
+
+	var buttonsOpen = false;
 	
 	function getQueryVariable(variable)
 	{
@@ -148,6 +201,14 @@
 	                 '-ms-transform' : 'rotate('+ degrees +'deg)',
 	                 'transform' : 'rotate('+ degrees +'deg)'});
 	    return $(this);
+	};
+
+	jQuery.fn.clickToggle = function(a,b) {
+		console.log(a);
+		console.log(b);
+		var ab=[b,a];
+		function cb(){ ab[this._tog^=1].call(this); }
+		return this.on("click", cb);
 	};
 
 	//A generic request function
@@ -178,24 +239,138 @@
 
 	function drawMessage(data){
 		var $newMessage = $("<div id='"+data.id+"' class='textShadow hidden absolute "+ data.class +"' style='left: "+data.position.x+"%; top: "+data.position.y+"%;'>"+ data.text +"</div>");
-		$("body").append($newMessage);
+		
+		if($("#thewall").length <= 0){
+			$("body").append("<div id='thewall'>");
+		}
+		
+		$("#thewall").append($newMessage);
 		$newMessage.rotate(data.rotate);
 		$newMessage.delay(250).switchClass("hidden","visible",1000, "easeInExpo");
 	}
 
-	$(".newButton").click(function(){
+	$(".button:first-child").clickToggle(function(){
+		buttonsOpen = true;
 
-		vex.dialog.confirm({
+		openButtonScreen();
+
+		/*vex.dialog.confirm({
 			message: 'Click anywhere on the wall to write a new message',
 			callback: function(value) {
 				//return console.log(value ? 'waiting for click' : 'cancelled');
 				if(value){
 					waitForScreenClick();
 				}
+				else{
+					closeButtonScreen();
+				}
+			}
+		});*/
+
+	}, function(){
+		buttonsOpen = false;
+		closeButtonScreen();
+	});
+
+
+	$.Finger = {
+		pressDuration: 1000
+	}
+
+	$(document).on("doubletap", function(e){
+		e.preventDefault();
+		console.log(e);
+		if(buttonsOpen){
+			$(".button:first-child").click();
+		}
+
+		var x = e.x / $(document).width() * 100;
+		var y = e.y / $(document).height() * 100;
+
+		vex.dialog.open({
+			message: 'Write something on the wall',
+			input: "<input name='text' type='text' placeholder='say something damnit!' required /> \
+					<br><div class='linespacer'></div> \
+				<select id='fontsize' name='fontsize'> \
+				<option class='extrasmall' value='extrasmall'>extra small</option> \
+				<option class='small' value='small'>small</option> \
+				<option class='medium' value='medium'>medium</option> \
+				<option class='large' value='large'>large</option> \
+				<option class='extralarge' value='extralarge'>extra large</option> \
+				</select> <br><div class='linespacer'></div> \
+				<select id='font' name='font'> \
+				<option class='one' value='one'>Shadows Into Light</option> \
+				<option class='two' value='two'>Special Elite</option> \
+				<option class='three' value='three'>Waiting for the Sun</option> \
+				</select>",
+			buttons: [
+				$.extend({}, vex.dialog.buttons.YES, {
+		    		text: 'Write on the wall'
+		    	}), $.extend({}, vex.dialog.buttons.NO, {
+		    		text: 'Nevermind'
+				})
+			],
+			afterOpen: function(){
+				console.log("opened");
+
+				// var sel = new Select({
+				// 	el: $("#fontsize")[0]
+				// 	className: 'select-theme-default'
+
+				// });
+				Select.init({ useNative: false });
+			},
+			callback: function(data) {
+				if (data === false) {
+					return console.log('Cancelled');
+				}
+				
+				createNewMessage(data.fontsize + " " + data.font, data.text, { x: x, y: y});
 			}
 		});
-
 	});
+
+	//click on the new message button
+	$("#message").click(function(){
+		vex.dialog.alert({
+			message: 'At any time, <strong>double tap anywhere</strong> on the wall to write a new message there',
+			callback: function(value) {
+				if(buttonsOpen){
+					$(".button:first-child").click();
+				}
+			}
+		});
+	});
+
+	//click on the clear button
+	$("#clear").click(function(){
+		vex.dialog.confirm({
+			message: 'Are you sure you want to ruin the fun and start over?',
+			callback: function(value) {
+				if(value){
+					socket.emit("clearWall", {
+
+					});
+				}
+				else{
+
+				}
+
+				if(buttonsOpen){
+					$(".button:first-child").click();
+				}
+			}
+		});
+	});
+
+	function clearTheWall(){
+		$("#thewall").delay(150).animate({
+			"left": "100%",
+			"opacity": 0
+		},{duration:250, easing: "easeOutCirc", complete: function(){
+			$(this).remove();
+		}});
+	}
 
 	function waitForScreenClick(){
 		$("body").append("<div class='vex-overlay'>");
@@ -210,7 +385,7 @@
 
 			console.log(x + "% " + y + "%");
 
-			vex.dialog.open({
+			/*vex.dialog.open({
 				message: 'Write something on the wall',
 				input: "<input name='text' type='text' placeholder='say something damnit!' required /> \
 						<br><div class='linespacer'></div> \
@@ -236,11 +411,11 @@
 				afterOpen: function(){
 					console.log("opened");
 
-					/*var sel = new Select({
-						el: $("#fontsize")[0]
-						className: 'select-theme-default'
+					// var sel = new Select({
+					// 	el: $("#fontsize")[0]
+					// 	className: 'select-theme-default'
 
-					});*/
+					// });
 					Select.init({ useNative: false });
 				},
 				callback: function(data) {
@@ -250,7 +425,88 @@
 					
 					createNewMessage(data.fontsize + " " + data.font, data.text, { x: x, y: y});
 				}
-			});
+			});*/
+		});
+	}
+
+
+	$(".button").children("div").each(function(){
+		new Tether({
+			element: $(this),
+			target: $(this).parent(),
+			attachment: "middle right",
+			targetAttachment: "middle left",
+			class: "p z-index-3 dropShadow",
+			offset: "0px 8px"
+		});
+	});
+
+	function openButtonScreen(){
+		$(".button").each(function(i){
+			$(this).switchClass("hidden", "visibile", 250, "easeOutExpo");
+			var currBottom = parseInt($(this).css("bottom"));
+			var height = parseInt($(this).height());
+			$(this).animate({
+				bottom: (currBottom + (currBottom * i)) + ((height*i)) + "px"
+			}, { queue: false, duration: 250, easing: "easeOutCirc", complete: function(){
+				$(".p").switchClass("hidden", "visible", 300, "easeInCirc");
+				Tether.position();
+			}, step: function(){
+				Tether.position();
+			}})
+
+			if(i == 0){
+				// a fake animation for rotating
+				$elem = $(this);
+				$({deg: 0}).animate({deg: -45}, {
+			        duration: 250,
+			        step: function(now) {
+			            // in the step-callback (that is fired each step of the animation),
+			            // you can use the `now` paramter which contains the current
+			            // animation-position (`0` up to `angle`)
+			            $elem.css({
+			                transform: 'rotate(' + now + 'deg)'
+			            });
+			        },
+			        easing: "easeOutCirc",
+			        queue: false
+			    });
+			}
+		});
+	}
+
+	function closeButtonScreen(){
+		$(".p").switchClass("visible", "hidden", 200, "easeInCirc");
+
+		$(".button").each(function(i){
+			var currBottom = parseInt($(this).css("bottom"));
+			var height = parseInt($(this).height());
+			$(this).delay(300).animate({
+				bottom: $(".button:first-child").css("bottom")
+			}, { queue: true, duration: 350, easing: "easeInSine", step: function(){
+				Tether.position();
+			}, complete: function(){ Tether.position() }});
+
+			if(i == 0){
+				// a fake animation for rotating
+				$elem = $(this);
+				$({deg: -45}).delay(300).animate({deg: 0}, {
+			        duration: 250,
+			        step: function(now) {
+			            // in the step-callback (that is fired each step of the animation),
+			            // you can use the `now` paramter which contains the current
+			            // animation-position (`0` up to `angle`)
+			            $elem.css({
+			                transform: 'rotate(' + now + 'deg)'
+			            });
+			        },
+			        easing: "easeInSine",
+			        queue: true
+			    });
+			}
+			else{
+				$(this).switchClass("visible", "hidden", 350, "easeInExpo");
+			}
 		});
 	}
 
@@ -269,6 +525,9 @@
 			});
 		}
 	});
+	socket.on("clearWall", function(){
+		clearTheWall();
+	})
 
 
 	$(document).ready(function(){

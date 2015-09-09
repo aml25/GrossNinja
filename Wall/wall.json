@@ -6,7 +6,7 @@
 					"class": "extrasmall one",
 					"text": "fuck yeah!!!!!!!!!!!!!!!!",
 					"position": {
-						"x": 28.8948069241011962,
+						"x": 28.894806924101196,
 						"y": 29.247910863509752
 					},
 					"rotate": 6.762534868903458,
@@ -56,6 +56,65 @@
 			]
 		},
 		"fuckfuck": {
+			"messages": [
+				{
+					"class": "medium three",
+					"text": "Welcome friends!  Write as you please.  I'll continue to make updates, so things may change",
+					"position": {
+						"x": 33.95472703062583,
+						"y": 27.715877437325904
+					},
+					"rotate": 14.597332431003451,
+					"timetodie": 1581521.1655106395,
+					"id": 24859359
+				},
+				{
+					"class": "extralarge one",
+					"text": "you suck balls man...",
+					"position": {
+						"x": 16.77762982689747,
+						"y": 22.98050139275766
+					},
+					"rotate": -18.48064665682614,
+					"timetodie": 149685.5590492487,
+					"id": 368676
+				},
+				{
+					"class": "medium one",
+					"text": "music rulz!",
+					"position": {
+						"x": 16.511318242343542,
+						"y": 18.94150417827298
+					},
+					"rotate": -10.63145495718345,
+					"timetodie": 568521.7939317226,
+					"id": 12013278
+				},
+				{
+					"class": "extrasmall one",
+					"text": "dafsdfsdfdsfs",
+					"position": {
+						"x": 65.24633821571238,
+						"y": 31.47632311977716
+					},
+					"rotate": -19.406761892605573,
+					"timetodie": 206675.24146847427,
+					"id": 272145
+				},
+				{
+					"class": "extrasmall one",
+					"text": "ddfasdfsd",
+					"position": {
+						"x": 61.784287616511314,
+						"y": 51.11420612813371
+					},
+					"rotate": 4.452798643615097,
+					"timetodie": 1247850.0691708177,
+					"id": 2755436
+				}
+			]
+		},
+		"fuck": {
 			"messages": []
 		}
 	},
@@ -70,6 +129,50 @@
 			"rotate": -22.890785906929523,
 			"timetodie": 330323.0185210705,
 			"id": 590028
+		},
+		{
+			"class": "extralarge three",
+			"text": "fuck yeah!",
+			"position": {
+				"x": 23.128119800332776,
+				"y": 21.448467966573816
+			},
+			"rotate": 3.7562174606136978,
+			"timetodie": 924094.2156873643,
+			"id": 4815945
+		},
+		{
+			"class": "medium two",
+			"text": "Shit yeahhhhh",
+			"position": {
+				"x": null,
+				"y": null
+			},
+			"rotate": -24.277299316599965,
+			"timetodie": 975174.4870562106,
+			"id": 17106480
+		},
+		{
+			"class": "extrasmall one",
+			"text": "dafdsfadsfasdfas",
+			"position": {
+				"x": 57.08333333333333,
+				"y": 67.80415430267063
+			},
+			"rotate": 24.26563116023317,
+			"timetodie": 401495.6446364522,
+			"id": 6742450
+		},
+		{
+			"class": "extrasmall one",
+			"text": "fuck fuck fuck fuck",
+			"position": {
+				"x": 6.25,
+				"y": 56.23145400593472
+			},
+			"rotate": 0.002731732092797756,
+			"timetodie": 139366.01425521076,
+			"id": 9051090
 		}
 	]
 }
